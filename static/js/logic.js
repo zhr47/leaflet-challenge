@@ -6,10 +6,9 @@ console.log(week_url);
 month_url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson";
 console.log(week_url);
 
-// Creating map object
+// map object
 var myMap = L.map("map", {
-  center: [38.51073, -96.4247],
-  zoom: 4
+  center: [38.51073, -96.4247], zoom: 4
 });
 
 // Adding tile layer
@@ -22,7 +21,7 @@ L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_toke
   accessToken: API_KEY
 }).addTo(myMap);
 
-// Color of circles based on manitude
+// Color of circles
 function chooseColor(magnitude) 
 {
 switch (true) 
@@ -71,35 +70,12 @@ L.geoJson(data, {
 },
 style: styleInfo, 
 
-// Called on each feature
+// Getting  feature
 onEachFeature: function(feature, layer) 
 {
-// Create a GeoJSON layer with the retrieved data
+// GeoJSON layer with the retrieved data
   layer.bindPopup("<h4> Location: " + feature.properties.place + "</h4> <hr> <h5> Magnitude: " + feature.properties.mag + "</h5>");
-
-  },
+},
 }).addTo(myMap);
 
-
-// Set up legend
-var legend = L.control({position: 'bottomright'});
-legend.onAdd = function()
-
-{
-  var div = L.DomUtil.create('div', 'info legend'),
-  magnitudeLevels = [0, 1, 2, 3, 4, 5];
-  console.log(magnitudeLevels)
-  div.innerHTML += "<h3>Magnitude</h3>"
-// loop through our density intervals and generate a label with a colored square for each interval
-  for (var i = 0; i < magnitudeLevels.length; i++) 
-  {
-      div.innerHTML +=
-          '<i style="background:' + chooseColor(magnitudeLevels[i] + 1) + '"></i> ' +
-          magnitudeLevels[i] + (magnitudeLevels[i + 1] ? '&ndash;' + magnitudeLevels[i + 1] + '<br>' : '+');
-  }
-  return div;
-};
-
-// Add legend to map
-legend.addTo(myMap);
 });
